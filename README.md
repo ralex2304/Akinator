@@ -1,0 +1,3 @@
+# Akinator
+
+MIPT project
