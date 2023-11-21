@@ -2,6 +2,47 @@
 
 #define PRINT_(...) if (printf(__VA_ARGS__) <= 0) return Status::OUTPUT_ERROR;
 
+Status::Statuses interface_guess_header() {
+    PRINT_("# Guess\n");
+
+    return Status::NORMAL_WORK;
+}
+
+Status::Statuses interface_definition_header() {
+    PRINT_("# Definition\n");
+
+    return Status::NORMAL_WORK;
+}
+
+Status::Statuses interface_compare_header() {
+    PRINT_("# Comparison\n");
+
+    return Status::NORMAL_WORK;
+}
+
+Status::Statuses interface_save_header() {
+    PRINT_("# Save tree\n");
+
+    return Status::NORMAL_WORK;
+}
+
+Status::Statuses interface_clear_console() {
+    if (ui_clear_console() != 0)
+        return Status::INPUT_ERROR;
+    return Status::NORMAL_WORK;
+}
+
+Status::Statuses interface_press_any_key_and_clear() {
+    PRINT_("Press any key to continue\n");
+
+    if (ui_get_char_no_enter() == '\0')
+        return Status::INPUT_ERROR;
+
+    STATUS_CHECK(interface_clear_console());
+
+    return Status::NORMAL_WORK;
+}
+
 Status::Statuses interface_greet() {
     PRINT_("# Akinator greets you!\n");
 
@@ -10,6 +51,20 @@ Status::Statuses interface_greet() {
 
 Status::Statuses interface_goodbye() {
     PRINT_("# Goodbye\n");
+
+    return Status::NORMAL_WORK;
+}
+
+Status::Statuses interface_give_definition_no_characteristics(const char* object) {
+    assert(object);
+
+    PRINT_("is %s. What else do you want from me? This object has no properties!\n", object);
+
+    return Status::NORMAL_WORK;
+}
+
+Status::Statuses interface_object_not_found() {
+    PRINT_("# I don't know anything about this object\n");
 
     return Status::NORMAL_WORK;
 }
@@ -27,6 +82,8 @@ Status::Statuses interface_now_i_know() {
 }
 
 Status::Statuses interface_begin_menu() {
+    STATUS_CHECK(interface_clear_console());
+
     PRINT_("# Choose mode:\n"
            "# 'g' - guess\n"
            "# 'd' - give definition\n"
@@ -86,7 +143,7 @@ Status::Statuses interface_ask_y_n(bool* answer) {
     size_t attempts = MAX_ATTEMPTS_NUMBER;
 
     do {
-        char c = ui_get_char();
+        char c = ui_get_char_no_enter();
 
         if (c == 'y' || c == 'n') {
             *answer = (c == 'y');
@@ -105,6 +162,67 @@ Status::Statuses interface_ask_new_node(AkinatorString* new_node_text, Tree* tre
     PRINT_("# And what it is?\n");
 
     return interface_get_string(new_node_text, tree);
+}
+
+Status::Statuses interface_ask_ask_object_for_definition(char** object) {
+    assert(object);
+    assert(*object == nullptr);
+
+    PRINT_("# Enter object name:\n");
+
+    *object = ui_get_string();
+    if (*object == nullptr)
+        return Status::INPUT_ERROR;
+
+    return Status::NORMAL_WORK;
+}
+
+Status::Statuses interface_give_definition_begin(const char* object) {
+    assert(object);
+
+    PRINT_("# %s ", object);
+
+    return Status::NORMAL_WORK;
+}
+
+Status::Statuses interface_compare_begin_similar(const char* object1, const char* object2) {
+    assert(object1);
+    assert(object2);
+
+    PRINT_("# %s and %s ", object1, object2);
+
+    return Status::NORMAL_WORK;
+}
+
+Status::Statuses interface_compare_totally_different() {
+    PRINT_("have nothing in same.\n");
+
+    return Status::NORMAL_WORK;
+}
+
+Status::Statuses interface_give_definition_characteristic(bool is_true, const char* characteristic,
+                                                          bool is_last, bool multiple) {
+    assert(characteristic);
+
+    if (multiple) {
+        PRINT_("are ");
+    } else {
+        PRINT_("is ");
+    }
+
+    if (!is_true) {
+        PRINT_("not ");
+    }
+
+    PRINT_("%s", characteristic);
+
+    if (!is_last) {
+        PRINT_(", ");
+    } else {
+        PRINT_(".\n");
+    }
+
+    return Status::NORMAL_WORK;
 }
 
 Status::Statuses interface_ask_diff(const AkinatorString* entity1, const AkinatorString* entity2,
@@ -165,12 +283,12 @@ static TreeNodeActionRes search_string_in_tree_(Tree* tree, TreeNode** node, va_
     char* str = va_arg(args_dup, char*);
 
     assert(str);
-    if (*is_found) return TreeNodeActionRes::EXIT;
+    assert(*is_found == false);
 
     if (strcmp(str, ((AkinatorString*)(*node)->elem)->str) == 0) {
         *is_found = true;
         va_end(args_dup);
-        return TreeNodeActionRes::EXIT;
+        return TreeNodeActionRes::EXIT_FULL;
     }
 
     va_end(args_dup);

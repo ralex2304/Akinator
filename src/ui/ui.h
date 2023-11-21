@@ -5,7 +5,21 @@
 #include <stdio.h>
 #include <ctype.h>
 
+#ifdef unix
+
+#include <termios.h>
+#include <unistd.h>
+
+#endif //< #ifdef unix
+
 #include "utils/macros.h"
+
+/**
+ * @brief Clears console. Returns system() call result
+ *
+ * @return int -1 if error
+ */
+int ui_clear_console();
 
 /**
  * @brief Gets one line from input stream
@@ -21,7 +35,7 @@ char* ui_get_string(FILE* stream = stdin);
  * @param stream
  * @return char
  */
-char ui_get_char(FILE* stream = stdin);
+char ui_get_char_no_enter(FILE* stream = stdin);
 
 /**
  * @brief Flushes input stream

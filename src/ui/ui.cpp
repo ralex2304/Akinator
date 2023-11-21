@@ -1,5 +1,15 @@
 #include "ui.h"
 
+int ui_clear_console() {
+#ifdef unix
+    return system("clear");
+#elif _WIN32
+    return system("cls");
+#else
+    return 0;
+#endif
+}
+
 char* ui_get_string(FILE* stream) {
     assert(stream);
 
@@ -18,21 +28,27 @@ char* ui_get_string(FILE* stream) {
     return input;
 }
 
-char ui_get_char(FILE* stream) {
+char ui_get_char_no_enter(FILE* stream) {
     assert(stream);
 
-    int c = '\0';
+#ifdef unix
+    struct termios oldt = {};
+    tcgetattr(STDIN_FILENO, &oldt);
 
-    while ((c = getchar()) == '\n' && !feof(stream) && !ferror(stream)) {}
+    struct termios newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+#endif //< #ifdef unix
 
-    if (c == EOF || c == '\n') {
+    int c = getc(stream);
+
+    if (c == EOF || feof(stream) || ferror(stream)) {
         return '\0';
     }
 
-    if (getchar() != '\n') {
-        input_flush(stream);
-        return '\0';
-    }
+#ifdef unix
+    tcsetattr( STDIN_FILENO, TCSANOW, &oldt);
+#endif //< #ifdef unix
 
     return (char)c;
 }

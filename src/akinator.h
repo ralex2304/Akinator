@@ -9,7 +9,10 @@
 #include "ui/ui.h"
 #include "file/file.h"
 #include "text_tree_parser/text_tree_parser.h"
+
 #include "akinator_modes/guess.h"
+#include "akinator_modes/definition.h"
+#include "akinator_modes/compare.h"
 
 
 #ifdef DEBUG

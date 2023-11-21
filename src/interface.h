@@ -24,6 +24,29 @@ struct AkinatorString {
     char* str = nullptr;
 };
 
+Status::Statuses interface_guess_header();
+
+Status::Statuses interface_definition_header();
+
+Status::Statuses interface_compare_header();
+
+Status::Statuses interface_save_header();
+
+Status::Statuses interface_clear_console();
+
+Status::Statuses interface_press_any_key_and_clear();
+
+Status::Statuses interface_give_definition_characteristic(bool is_true, const char* characteristic,
+                                                          bool is_last, bool multiple = false);
+
+Status::Statuses interface_give_definition_begin(const char* object);
+
+Status::Statuses interface_compare_begin_similar(const char* object1, const char* object2);
+
+Status::Statuses interface_compare_totally_different();
+
+Status::Statuses interface_ask_ask_object_for_definition(char** object);
+
 Status::Statuses interface_ask_question_about_node(const char* text, bool* answer);
 
 Status::Statuses interface_ask_question_about_saving(bool* answer);
@@ -39,6 +62,10 @@ Status::Statuses interface_goodbye();
 Status::Statuses interface_begin_menu();
 
 Status::Statuses interface_now_i_know();
+
+Status::Statuses interface_object_not_found();
+
+Status::Statuses interface_give_definition_no_characteristics(const char* object);
 
 Status::Statuses interface_ask_new_node(AkinatorString* new_node_text, Tree* tree);
 

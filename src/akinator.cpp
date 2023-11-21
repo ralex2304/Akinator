@@ -73,25 +73,30 @@ Status::Statuses akinator_menu(Tree* tree) {
     Status::Statuses res = Status::WRONG_CMD;
 
     do {
-        res = akinator_enter_mode(tree, ui_get_char());
+        res = akinator_enter_mode(tree, ui_get_char_no_enter());
 
         if (res != Status::WRONG_CMD)
             break;
 
-        STATUS_CHECK(interface_try_again());
+        if (--attempts)
+            STATUS_CHECK(interface_try_again());
 
-    } while (--attempts);
+    } while (attempts);
 
     if (res == Status::WRONG_CMD) {
         STATUS_CHECK(interface_too_many_attempts(MAX_ATTEMPTS_NUMBER));
         return Status::WRONG_CMD;
     }
 
+    if (res != Status::OK_EXIT)
+        STATUS_CHECK(interface_press_any_key_and_clear());
+
     return res;
 }
 
-#define MENU_CASE_(c_, action_) case c_:            \
-                                    res = action_;  \
+#define MENU_CASE_(c_, action_) case c_:                                        \
+                                    STATUS_CHECK(interface_clear_console());    \
+                                    res = action_;                              \
                                     break
 
 Status::Statuses akinator_enter_mode(Tree* tree, char input) { // TODO console no echo
@@ -99,11 +104,12 @@ Status::Statuses akinator_enter_mode(Tree* tree, char input) { // TODO console n
     switch (input) {
 
         MENU_CASE_('g', akinator_guess(tree));
-        //MENU_CASE_('d', akinator_definition(tree));
-        //MENU_CASE_('c', akinator_compare(tree));
+        MENU_CASE_('d', akinator_definition(tree));
+        MENU_CASE_('c', akinator_compare(tree));
         MENU_CASE_('s', akinator_save(tree, false));
 
         case 'q':
+            STATUS_CHECK(interface_clear_console());
             res = Status::OK_EXIT;
             break;
         default:
@@ -116,11 +122,13 @@ Status::Statuses akinator_enter_mode(Tree* tree, char input) { // TODO console n
 Status::Statuses akinator_save(Tree* tree, bool ask) {
     assert(tree);
 
+    STATUS_CHECK(interface_save_header());
+
     bool answer = false;
-    if (!ask)
+    if (ask)
         STATUS_CHECK(interface_ask_question_about_saving(&answer));
 
-    if (answer || ask) {
+    if (answer || !ask) {
         char* filename = nullptr;
         STATUS_CHECK(interface_ask_output_filename(&filename), FREE(filename));
         assert(filename);

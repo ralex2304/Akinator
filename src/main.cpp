@@ -9,7 +9,7 @@ LogFileData log_file = {"log"};
 
 int main(int argc, char* argv[]) {
     ArgsVars args_vars = {};
-    args_vars.input_filename = "123.txt"; //< default value
+    args_vars.input_filename = "trees/example.txt"; //< default value
 
     STATUS_CHECK_RAISE(args_parse(argc, argv, &args_vars));
 

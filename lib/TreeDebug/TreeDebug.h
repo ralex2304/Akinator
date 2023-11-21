@@ -22,9 +22,10 @@ enum class TreeChildSide {
  * @brief Traversal action function result
  */
 enum class TreeNodeActionRes {
-    EXIT  = -1,
-    ERROR =  0,
-    OK    =  1,
+    EXIT_FULL = -2,
+    EXIT_NODE = -1,
+    ERROR     =  0,
+    OK        =  1,
 };
 
 /**

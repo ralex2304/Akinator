@@ -3,6 +3,8 @@
 Status::Statuses akinator_guess(Tree* tree) {
     assert(tree);
 
+    STATUS_CHECK(interface_guess_header());
+
     STATUS_CHECK(akinator_guess_enter_node(tree, &tree->root));
 
     return Status::NORMAL_WORK;
