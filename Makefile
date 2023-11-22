@@ -9,52 +9,46 @@ CFLAGS = -fdiagnostics-color=always -Wshadow -Winit-self -Wredundant-decls -Wcas
 		 -Wpointer-arith -Wsign-promo -Wstack-usage=8192 -Wstrict-aliasing -Wstrict-null-sentinel 		 \
 		 -Wtype-limits -Wwrite-strings -Werror=vla -D_DEBUG -D_EJUDGE_CLIENT_SIDE
 
-CFLAGS_SANITIZER = -fsanitize=address,alignment,bool,bounds,enum,float-cast-overflow,$\
-				   float-divide-by-zero,integer-divide-by-zero,leak,nonnull-attribute,null,$\
-				   object-size,return,returns-nonnull-attribute,shift,signed-integer-overflow,$\
-				   undefined,unreachable,vla-bound,vptr
-
 LIB_DIR = lib
-LIB_FILES = TreeDebug/TreeDebug.a
+LIB_FILES = TreeDebug/TreeDebug.lib
 
 SRC_DIR = src
 BUILD_DIR = build
 DOCS_DIR = docs
-NON_CODE_DIRS =
-TARGET = main
+NON_CODE_DIRS = $(BUILD_DIR) $(DOCS_DIR) .vscode .git
+TARGET = main.exe
 
-CD = $(shell pwd)
-DOCS_TARGET = $(DOCS_DIR)/docs_generated
+CD = $(shell cd)
+DOCS_TARGET = $(DOCS_DIR)\\docs_generated
 
+NESTED_CODE_DIRS_CD = $(shell dir $(SRC_DIR)\ /S /B /AD) # | findstr /V /I "$(NON_CODE_DIRS)"
+NESTED_CODE_DIRS = $(NESTED_CODE_DIRS_CD:$(CD)\$(SRC_DIR)\\%=%)
 
-NESTED_CODE_DIRS_CD = $(shell find ./$(SRC_DIR) -maxdepth 5 -type d $(NON_CODE_DIRS:%=! -path "*%*"))
-NESTED_CODE_DIRS = $(NESTED_CODE_DIRS_CD:.%=%)
+FILES_FULL = $(shell dir "$(SRC_DIR)\*.cpp" /s /a /b)
+FILES = $(FILES_FULL:$(CD)\$(SRC_DIR)\\%=%)
 
-FILES_FULL = $(shell find ./$(SRC_DIR) -name "*.cpp")
-FILES = $(FILES_FULL:.%=%)
-
-MAKE_DIRS = $(NESTED_CODE_DIRS:%=$(BUILD_DIR)%)
-OBJ = $(FILES:%=$(BUILD_DIR)%)
+MAKE_DIRS = $(NESTED_CODE_DIRS:%=$(BUILD_DIR)\\%)
+OBJ = $(FILES:%=$(BUILD_DIR)\\%)
 DEPENDS = $(OBJ:%.cpp=%.d)
 OBJECTS = $(OBJ:%.cpp=%.o)
 
-LIBS = $(LIB_FILES:%=$(LIB_DIR)/%)
+LIBS = $(LIB_FILES:%=$(LIB_DIR)\\%)
 
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	@$(CC) $(CFLAGS) -I$(LIB_DIR) $(if $(sanitizer), $(CFLAGS_SANITIZER)) $^ -o $@ $(LIBS)
+	@$(CC) $(CFLAGS) -I$(LIB_DIR) $^ -o $@ $(LIBS)
 
 $(BUILD_DIR):
-	@mkdir ./$@
+	@if not exist $@ md $@
 
 $(MAKE_DIRS): | $(BUILD_DIR)
-	@mkdir ./$@
+	@if not exist $@ md $@
 
 -include $(DEPENDS)
 
-$(BUILD_DIR)/%.o: %.cpp | $(BUILD_DIR) $(MAKE_DIRS)
-	@$(CC) $(CFLAGS) -I$(LIB_DIR) $(if $(sanitizer), $(CFLAGS_SANITIZER)) -MMD -MP -c $< -o $@
+$(BUILD_DIR)\\%.o: $(SRC_DIR)\\%.cpp | $(MAKE_DIRS)
+	@$(CC) $(CFLAGS) -I$(LIB_DIR) -MMD -MP -c $< -o $@
 
 .PHONY: doxygen dox
 
@@ -62,12 +56,12 @@ doxygen dox: $(DOCS_TARGET)
 
 $(DOCS_TARGET): $(FILES:/%=%) | $(DOCS_DIR)
 	@echo "Doxygen generated %date% %time%" > $(DOCS_TARGET)
-	@doxygen.exe docs/Doxyfile
+	@doxygen docs/Doxyfile
 
 $(DOCS_DIR):
-	@mkdir ./$@
+	@if not exist $@ md $@
 
 clean:
-	@rm -rf ./$(BUILD_DIR)/*
-	@rm -rf ./$(TARGET)
-	@rm -rf ./$(DOCS_TARGET)
+	@del $(BUILD_DIR)\* /a /s /q
+	@del $(TARGET)
+	@del $(DOCS_TARGET)
