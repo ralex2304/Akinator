@@ -11,7 +11,7 @@
 
 #define PRINT_(...) if (printf(__VA_ARGS__) <= 0) return Status::OUTPUT_ERROR
 
-#define VOICE_SPEAK() (void) 0
+#define VOICE_SPEAK(async) (void) 0
 
 #endif //< #ifdef _WIN32
 
@@ -335,7 +335,7 @@ static TreeNodeActionRes search_string_in_tree_(Tree* tree, TreeNode** node, va_
 
 #else //< #ifndef _WIN32
 
-#define PRINT_(...) if (printf(__VA_ARGS__) <= 0) false
+#define PRINT_(...) if (printf(__VA_ARGS__) <= 0) return false
 
 #define VOICE_SPEAK() (void) 0
 

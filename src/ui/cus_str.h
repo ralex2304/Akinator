@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
-
+#include <stdlib.h>
 
 /**
  * @brief Gets line from stream
