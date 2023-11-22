@@ -3,6 +3,12 @@
 
 #include <stdlib.h>
 #include <memory.h>
+#include <assert.h>
+
+#ifdef __TXLIB_H_INCLUDED
+#undef MAX
+#undef MIN
+#endif //< #ifdef __TXLIB_H_INCLUDED
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
@@ -25,6 +31,9 @@ inline void* recalloc(void* ptr, size_t old_size, size_t new_size) {
 }
 
 inline void fill(void* array, size_t len, const void* elem, const size_t elem_size) {
+    assert(array);
+    assert(elem);
+
     while (len--) {
         memcpy(array, elem, elem_size);
         array = (char*)array + elem_size;
@@ -40,5 +49,24 @@ struct VarCodeData {
 
 #define VAR_CODE_DATA(name) {# name, __FILE__, __LINE__, __func__}
 #define VAR_CODE_DATA_PTR(name) {(# name) + 1, __FILE__, __LINE__, __func__}
+
+#ifndef unix
+
+inline char* strndup(const char* src, const size_t n) {
+    assert(src);
+
+    size_t src_len = strlen(src);
+
+    char* dest = (char*)calloc(n + 1, sizeof(char));
+
+    if (!dest) return nullptr;
+
+    strncpy(dest, src, MIN(n, src_len));
+    dest[MIN(n, src_len)] = '\0';
+
+    return dest;
+}
+
+#endif //< #ifndef unix
 
 #endif // #ifndef MACROS_H_

@@ -24,7 +24,7 @@ enum class TreeChildSide {
 enum class TreeNodeActionRes {
     EXIT_FULL = -2,
     EXIT_NODE = -1,
-    ERROR     =  0,
+    ERR       =  0,
     OK        =  1,
 };
 

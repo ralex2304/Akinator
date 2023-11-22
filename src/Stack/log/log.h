@@ -7,6 +7,22 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "utils/macros.h"
+
+#ifdef _WIN32
+
+#define WIN(...) __VA_ARGS__
+
+#define UNIX(...)
+
+#else
+
+#define WIN(...)
+
+#define UNIX(...) __VA_ARGS__
+
+#endif
+
 /**
  * @brief Log file data struct
  *

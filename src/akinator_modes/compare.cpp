@@ -55,7 +55,7 @@ Status::Statuses akinator_compare_parse_objects(Tree* tree, const DefObject obje
                                                          objects[1].stk.data[depth + 1];
 
         STATUS_CHECK(interface_give_definition_characteristic(objects[0].stk.data[depth],
-                            ((AkinatorString*)node->elem)->str, is_last_iter, true));
+                               ((AkinatorString*)node->elem)->str, is_last_iter));
 
         node = objects[0].stk.data[depth] ? node->right : node->left;
     }

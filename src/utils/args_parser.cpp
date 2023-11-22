@@ -28,7 +28,7 @@ Status::Statuses args_parse(int argc, char* argv[], ArgsVars* args_vars) {
                     case ArgsMode::EXIT:
                         exit = true;
                         break;
-                    case ArgsMode::ERROR:
+                    case ArgsMode::ERR:
                         return Status::ARGS_ERROR;
                     default:
                         assert(0 && "args[j].func() returned wrong ArgsMode");
@@ -80,7 +80,7 @@ ArgsMode read_input_filename(const Argument args_dict[], const int args_dict_len
 
     if (++(*arg_i) >= argc) {
         printf("No input file name found\n");
-        return ArgsMode::ERROR;
+        return ArgsMode::ERR;
     }
 
     args_vars->input_filename = argv[*arg_i];

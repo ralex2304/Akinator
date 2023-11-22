@@ -1,3 +1,9 @@
+#ifdef _WIN32
+#define TX_COMPILED
+#define TX_USE_SPEAK
+#include "TXLib.h"
+#endif //< #ifdef _WIN32
+
 #include "TreeDebug/TreeDebug.h"
 #include "log/log.h"
 
@@ -8,6 +14,12 @@
 LogFileData log_file = {"log"};
 
 int main(int argc, char* argv[]) {
+
+#ifdef _WIN32
+    txSetLocale();
+    txDisableAutoPause();
+#endif //< #ifdef _WIN32
+
     ArgsVars args_vars = {};
     args_vars.input_filename = "trees/example.txt"; //< default value
 

@@ -3,12 +3,20 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 
 #ifdef unix
 
 #include <termios.h>
 #include <unistd.h>
+
+#elif _WIN32
+
+#include <windows.h>
+#include <conio.h>
+
+#include "cus_str.h"
 
 #endif //< #ifdef unix
 

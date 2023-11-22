@@ -6,7 +6,6 @@
 #include "config.h"
 #include "utils/statuses.h"
 #include "interface.h"
-#include "ui/ui.h"
 #include "file/file.h"
 #include "text_tree_parser/text_tree_parser.h"
 

@@ -17,12 +17,18 @@
 
 #endif //< #ifdef DEBUG
 
+#ifdef _WIN32
+#include "voiceover/voiceover.h"
+#endif  //<#ifdef _WIN32
+
 const size_t MAX_ATTEMPTS_NUMBER = 5; //< Max input attempts number
 
 struct AkinatorString {
     bool allocated = false;
     char* str = nullptr;
 };
+
+char interface_get_mode();
 
 Status::Statuses interface_guess_header();
 
@@ -37,7 +43,7 @@ Status::Statuses interface_clear_console();
 Status::Statuses interface_press_any_key_and_clear();
 
 Status::Statuses interface_give_definition_characteristic(bool is_true, const char* characteristic,
-                                                          bool is_last, bool multiple = false);
+                                                          bool is_last);
 
 Status::Statuses interface_give_definition_begin(const char* object);
 

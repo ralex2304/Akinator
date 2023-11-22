@@ -16,7 +16,11 @@ char* ui_get_string(FILE* stream) {
     char* input = nullptr;
     size_t input_size = 0;
 
+#ifdef unix
     ssize_t input_len = getline(&input, &input_size, stream);
+#else //< #ifndef unix
+    ssize_t input_len = cus_getline(&input, &input_size, stream);
+#endif //< #ifdef unix
 
     if (input_len <= 0) {
         FREE(input);
@@ -38,13 +42,14 @@ char ui_get_char_no_enter(FILE* stream) {
     struct termios newt = oldt;
     newt.c_lflag &= ~(ICANON | ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-#endif //< #ifdef unix
 
     int c = getc(stream);
+#elif _WIN32
+    int c = (stream == stdin) ? _getch() : getc(stream);
+#endif //< #ifdef unix
 
-    if (c == EOF || feof(stream) || ferror(stream)) {
+    if (c == EOF || feof(stream) || ferror(stream))
         return '\0';
-    }
 
 #ifdef unix
     tcsetattr( STDIN_FILENO, TCSANOW, &oldt);

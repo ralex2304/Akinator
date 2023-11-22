@@ -26,13 +26,13 @@ int log_printf(LogFileData* log_file, const char* format, ...) {
 bool log_open_file(LogFileData* log_file, const char* mode) {
     assert(log_file);
 
-    const size_t max_len = strlen(log_file->filename) + sizeof("/stk.txt");
+    const size_t max_len = strlen(log_file->filename) + sizeof(UNIX("/") WIN("\\") "stk.txt");
 
     char* filename_ = strndup(log_file->filename, max_len);
     if (filename_ == nullptr)
         return false;
 
-    strncat(filename_, "/stk.txt", max_len);
+    strncat(filename_, UNIX("/") WIN("\\") "stk.txt", max_len);
 
     log_file->file = fopen(filename_, mode);
 

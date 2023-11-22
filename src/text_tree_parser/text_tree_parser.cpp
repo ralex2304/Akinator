@@ -181,7 +181,7 @@ static TreeNodeActionRes text_tree_write_prefix_action_(Tree* tree, TreeNode** n
     va_end(args_dup);
 
     if (fprintf(file, "( \"%s\" ", ((AkinatorString*)((*node)->elem))->str) <= 0)
-        return TreeNodeActionRes::ERROR;
+        return TreeNodeActionRes::ERR;
 
     return TreeNodeActionRes::OK;
 }
@@ -203,7 +203,7 @@ static TreeNodeActionRes text_tree_write_nil_action_(Tree* tree, TreeNode** node
     va_end(args_dup);
 
     if (fprintf(file, "nil ") <= 0)
-        return TreeNodeActionRes::ERROR;
+        return TreeNodeActionRes::ERR;
 
     return TreeNodeActionRes::OK;
 }
@@ -225,7 +225,7 @@ static TreeNodeActionRes text_tree_write_postfix_action_(Tree* tree, TreeNode** 
     va_end(args_dup);
 
     if (fprintf(file, ") ") <= 0)
-        return TreeNodeActionRes::ERROR;
+        return TreeNodeActionRes::ERR;
 
     return TreeNodeActionRes::OK;
 }

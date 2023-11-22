@@ -143,7 +143,7 @@ static TreeNodeActionRes akinator_compare_preorder_(Tree* tree, TreeNode** node,
         res |= stk_push(&object->stk, true);
 
     if (res != Stack::OK)
-        return TreeNodeActionRes::ERROR;
+        return TreeNodeActionRes::ERR;
 
     if (!(*node)->left && !(*node)->right &&
         strcmp(object->name, ((AkinatorString*)((*node)->elem))->str) == 0) {
@@ -179,7 +179,7 @@ static TreeNodeActionRes akinator_compare_postorder_(Tree* tree, TreeNode** node
     int res = stk_pop(&object->stk, &buf);
 
     if (res != Stack::OK)
-        return TreeNodeActionRes::ERROR;
+        return TreeNodeActionRes::ERR;
 
     return TreeNodeActionRes::OK;
 }

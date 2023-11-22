@@ -11,7 +11,7 @@
  * @brief Specifies int main() returns
  */
 enum class ArgsMode {
-    ERROR    = -1,    ///< Error
+    ERR      = -1,    ///< Error
     EXIT     =  0,    ///< Continue reading args, but then normal exit
     CONTINUE =  1,    ///< Continue reading args
 };

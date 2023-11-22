@@ -54,7 +54,7 @@ Status::Statuses akinator_init_tree(Tree* tree, char** input_data, const char* i
 
     STATUS_CHECK(text_tree_parser(tree, *input_data));
 
-    static char DEFAULT_TREE_ROOT_TEXT[] = "unknown entity";
+    static char DEFAULT_TREE_ROOT_TEXT[] = "неизвестно что";
     static AkinatorString DEFAULT_TREE_ROOT = {.allocated = false, .str = DEFAULT_TREE_ROOT_TEXT};
 
     if (tree->size == 0) {
@@ -73,7 +73,7 @@ Status::Statuses akinator_menu(Tree* tree) {
     Status::Statuses res = Status::WRONG_CMD;
 
     do {
-        res = akinator_enter_mode(tree, ui_get_char_no_enter());
+        res = akinator_enter_mode(tree, interface_get_mode());
 
         if (res != Status::WRONG_CMD)
             break;
@@ -99,16 +99,16 @@ Status::Statuses akinator_menu(Tree* tree) {
                                     res = action_;                              \
                                     break
 
-Status::Statuses akinator_enter_mode(Tree* tree, char input) { // TODO console no echo
+Status::Statuses akinator_enter_mode(Tree* tree, char input) {
     Status::Statuses res = Status::DEFAULT;
     switch (input) {
 
-        MENU_CASE_('g', akinator_guess(tree));
-        MENU_CASE_('d', akinator_definition(tree));
-        MENU_CASE_('c', akinator_compare(tree));
-        MENU_CASE_('s', akinator_save(tree, false));
+        MENU_CASE_('у', akinator_guess(tree));
+        MENU_CASE_('о', akinator_definition(tree));
+        MENU_CASE_('с', akinator_compare(tree));
+        MENU_CASE_('х', akinator_save(tree, false));
 
-        case 'q':
+        case 'в':
             STATUS_CHECK(interface_clear_console());
             res = Status::OK_EXIT;
             break;

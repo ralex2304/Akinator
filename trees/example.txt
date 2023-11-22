@@ -1,1 +1,1 @@
-( "device" ( "unknown entity" nil nil ) ( "portable" ( "computer" nil nil ) ( "phone" nil nil ) ) ) 
+( "устройство" ( "неизвестно что" nil nil ) ( "компактный" ( "человек" ( "компьютер" nil nil ) ( "дед" nil nil ) ) ( "телефон" nil nil ) ) )

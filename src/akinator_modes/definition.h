@@ -30,6 +30,6 @@ Status::Statuses akinator_definition_ask_and_search_object(Tree* tree, DefObject
 Status::Statuses akinator_definition_traversal(Tree* tree, const DefObject* obejct);
 
 Status::Statuses akinator_definition_parse_stk(Tree* tree, const DefObject* object,
-                                                       TreeNode* start_node = nullptr, size_t depth = 0);
+                                               TreeNode* start_node = nullptr, size_t depth = 0);
 
 #endif //< #ifndef AKINATOR_MODES_DEFINITION_H_
