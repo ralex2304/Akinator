@@ -7,9 +7,11 @@
 #include "ui/ui.h"
 #include "config.h"
 
+
 #ifdef DEBUG
 
 #include "TreeDebug/TreeDebug.h"
+#include "log/log.h"
 
 #else //< #ifndef DEBUG
 
@@ -27,6 +29,10 @@ struct AkinatorString {
     bool allocated = false;
     char* str = nullptr;
 };
+
+#ifdef DEBUG
+Status::Statuses interface_print_tree(Tree* tree);
+#endif //< #ifdef DEBUG
 
 char interface_get_mode();
 

@@ -10,7 +10,7 @@
 #include "utils/macros.h"
 #include "hash/crc32.h"
 
-#define DEBUG           ///< Enables debug mode
+#define STK_DEBUG           ///< Enables debug mode
 #define CANARY_PROTECT  ///< Enables canary protection
 #define HASH_PROTECT    ///< Enables hash protection
 
@@ -24,11 +24,11 @@ static const Canary_t CANARY_VAL = 0x8BADF00DDEADDEAD;           //< canary prot
 #define CANARY_T_PRINTF "%llX"                                   //< Canary_t printf specificator
 
 
-#ifdef DEBUG
+#ifdef STK_DEBUG
 
 #include "utils/ptr_valid.h"
 
-#endif //< #ifdef DEBUG
+#endif //< #ifdef STK_DEBUG
 
 /**
  * @brief Stack data struct
@@ -73,9 +73,9 @@ struct Stack {
     CRC32_t data_hash   = 0;
 #endif // #ifdef HASH_PROTECT
 
-#ifdef DEBUG
+#ifdef STK_DEBUG
     VarCodeData var_data;
-#endif // #ifdef DEBUG
+#endif // #ifdef STK_DEBUG
 
 #ifdef CANARY_PROTECT
     Canary_t canary_right = CANARY_VAL;
@@ -140,10 +140,10 @@ int stk_resize(Stack* stk, const size_t new_size);
  */
 int stk_dtor(Stack* stk);
 
-#ifdef DEBUG
+#ifdef STK_DEBUG
 
     /**
-     * @brief hidden ifdef macros for DEBUG
+     * @brief hidden ifdef macros for STK_DEBUG
      */
     #define ON_DEBUG(...) __VA_ARGS__
 
@@ -209,7 +209,7 @@ int stk_dtor(Stack* stk);
                     fill(stk->data + begin, end - begin, &stk->POISON, sizeof(Elem_t))
 
     /**
-     * @brief stk_verify() enables in DEBUG mode
+     * @brief stk_verify() enables in STK_DEBUG mode
      */
     #define STK_VERIFY(stk) stk_verify(stk)
 
@@ -227,9 +227,9 @@ int stk_dtor(Stack* stk);
      * @brief stk_dump macros
      */
     #define STK_DUMP(stk)   stk_dump(stk, VAR_CODE_DATA())
-#else // #ifndef DEBUG
+#else // #ifndef STK_DEBUG
     /**
-     * @brief hidden ifdef macros for DEBUG
+     * @brief hidden ifdef macros for STK_DEBUG
      */
     #define ON_DEBUG(...)
 
@@ -254,14 +254,14 @@ int stk_dtor(Stack* stk);
     #define STK_FILL_POISON(stk, begin, end) void (0)
 
     /**
-     * @brief stk_verify() returns OK in no DEBUG mode
+     * @brief stk_verify() returns OK in no STK_DEBUG mode
      */
     #define STK_VERIFY(stk) Stack::OK;
 
     #define STK_OK(stk, res) void (0)
 
     #define STK_DUMP(stk) void (0)
-#endif // #ifdef DEBUG
+#endif // #ifdef STK_DEBUG
 
 #ifdef HASH_PROTECT
 

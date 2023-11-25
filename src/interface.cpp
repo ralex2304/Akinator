@@ -1,5 +1,9 @@
 #include "interface.h"
 
+#ifdef DEBUG
+extern LogFileData log_file;
+#endif //< #ifdef DEBUG
+
 #ifdef _WIN32
 
 #define PRINT_(...) if (printf(__VA_ARGS__) <= 0) return Status::OUTPUT_ERROR;  \
@@ -113,6 +117,9 @@ Status::Statuses interface_begin_menu() {
            "'у' - угадаю объект\n"
            "'о' - дам определение\n"
            "'с' - сравню\n"
+#ifdef DEBUG
+           "'б' - выдать базу\n"
+#endif //< #ifdef DEBUG
            "'в' - выйти\n"
            "'х' - сохранить\n");
 
@@ -261,7 +268,7 @@ Status::Statuses interface_ask_diff(const AkinatorString* entity1, const Akinato
     assert(entity2->str);
     assert(diff_text);
 
-    PRINT_("В чём разница между \"%s\" и \"%s\"?\n", entity1->str, entity2->str);
+    PRINT_("Чем \"%s\" отличается от \"%s\"? Он...\n", entity1->str, entity2->str);
 
     return interface_get_string(diff_text, tree);
 }
@@ -296,6 +303,38 @@ Status::Statuses interface_correct_answer() {
 
     return Status::NORMAL_WORK;
 }
+
+
+#ifdef DEBUG
+
+Status::Statuses interface_print_tree(Tree* tree) {
+    assert(tree);
+
+    PRINT_("Внимание. Сейчас выдам базу\n");
+
+    char img_filename[log_file.MAX_FILENAME_LEN] = {};
+
+    log_printf(&log_file, "Tree print mode was called\n");
+
+    if (!tree_dump_dot(tree, img_filename))
+        return Status::TREE_ERROR;
+
+    char command[log_file.MAX_FILENAME_LEN] = {};
+
+    snprintf(command, log_file.MAX_FILENAME_LEN, "start %s", img_filename);
+
+#ifdef _WIN32
+    if (system(command) != 0) {
+        PRINT_("Системная ошибка\n");
+        VOICE_SPEAK(0);
+        return Status::OUTPUT_ERROR;
+    }
+#endif //< #ifdef _WIN32
+
+    return Status::NORMAL_WORK;
+}
+#endif //< #ifdef DEBUG
+
 #undef PRINT_
 #undef VOICE_SPEAK
 

@@ -106,6 +106,11 @@ Status::Statuses akinator_enter_mode(Tree* tree, char input) {
         MENU_CASE_('ó', akinator_guess(tree));
         MENU_CASE_('î', akinator_definition(tree));
         MENU_CASE_('ñ', akinator_compare(tree));
+
+#ifdef DEBUG
+        MENU_CASE_('á', akinator_print_tree(tree));
+#endif //< #ifdef DEBUG
+
         MENU_CASE_('õ', akinator_save(tree, false));
 
         case 'â':
@@ -140,3 +145,15 @@ Status::Statuses akinator_save(Tree* tree, bool ask) {
 
     return Status::NORMAL_WORK;
 }
+
+#ifdef DEBUG
+
+Status::Statuses akinator_print_tree(Tree* tree) {
+    assert(tree);
+
+    STATUS_CHECK(interface_print_tree(tree));
+
+    return Status::NORMAL_WORK;
+}
+
+#endif //< #ifdef DEBUG

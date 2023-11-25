@@ -4,14 +4,15 @@
 #include "TXLib.h"
 #endif //< #ifdef _WIN32
 
-#include "TreeDebug/TreeDebug.h"
+#include "config.h"
+
 #include "log/log.h"
+
+LogFileData log_file = {"log"};
 
 #include "utils/statuses.h"
 #include "utils/args_parser.h"
 #include "akinator.h"
-
-LogFileData log_file = {"log"};
 
 int main(int argc, char* argv[]) {
 

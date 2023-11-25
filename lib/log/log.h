@@ -15,7 +15,7 @@
 #include "../src/utils/text/text_lib.h"
 
 #ifdef _WIN32
-#include<windows.h>
+#include <windows.h>
 #endif
 
 /**

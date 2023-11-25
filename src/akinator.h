@@ -63,4 +63,8 @@ Status::Statuses akinator_menu(Tree* tree);
 
 Status::Statuses akinator_enter_mode(Tree* tree, char input);
 
+#ifdef DEBUG
+Status::Statuses akinator_print_tree(Tree* tree);
+#endif //< #ifdef DEBUG
+
 #endif //< #ifndef AKINATOR_H_
