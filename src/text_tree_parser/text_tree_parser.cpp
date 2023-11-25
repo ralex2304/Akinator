@@ -30,7 +30,7 @@ static TreeNodeActionRes text_tree_write_nil_action_(Tree* tree, TreeNode** node
                                 } while (0)
 
 #define SKIP_SPACE_(i_) do {                                                \
-                            while (text[i_] && isspace(text[*i])) (i_)++;   \
+                            while (text[i_] && isspace(text[i_])) (i_)++;   \
                                                                             \
                             if (text[i_] == ' ') {                          \
                                 PRINT_ERR_("File ended unexpectedly\n");    \
